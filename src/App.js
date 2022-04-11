@@ -2,6 +2,7 @@ import './App.css';
 import { useState } from 'react';
 import ComponentA from './components/ComponentA';
 import ComponentB from './components/ComponentB';
+import Button from './components/Button';
 
 function App() {
 
@@ -24,11 +25,30 @@ function App() {
   // }
   // si descomentas este método y el botón que lo lanza, verás que puedes actualizar 
   // la misma varible de estado desde app.js y desde ComponentB (clousure), manteniendo el estado
+  const arrayBtn = [
+    {element: 1, value: ''},
+    {element: 2, value: ''},
+    {element: 3, value: ''}
+  ];
 
+  const [buttonValues, setButtonValues] = useState(arrayBtn);
+
+  function handleClickButton(element) {
+    const findElement = buttonValues.find(el => el.element === element );
+
+    setButtonValues(prevState => prevState.map((el) => {
+      return el === findElement ? {...el, value: el.value === '' ? 'x' : '' } : el;
+    }))
+  }
   return (
     <div className="App">
+      {JSON.stringify(buttonValues)}
+      {buttonValues.map(({element, value}) => {
+        return <Button key={element} handleClick={() => handleClickButton(element)} value={value}/>
+      })}
       <p>Datos A: {datosA}</p>
       <p>Datos B: {datosB}</p>
+  
       <ComponentA  propFn={handleData}/> 
       <ComponentB setDatosB={setDatosB}/>
       {/* <button onClick={handleClick}>App.js</button>  */}
